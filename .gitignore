@@ -1,0 +1,11 @@
+# Build results
+bin/
+obj/
+
+# User-specific files
+*.user
+*.suo
+.vs/
+
+# Config local
+default_config.json
