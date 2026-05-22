@@ -8,6 +8,14 @@
     <Nullable>enable</Nullable>
     <AssemblyTitle>SimuladorTCP</AssemblyTitle>
     <AssemblyDescription>Herramienta de pruebas TCP/IP para PLCs</AssemblyDescription>
+
+    <!-- Publicación como .exe único portable -->
+    <PublishSingleFile>true</PublishSingleFile>
+    <SelfContained>true</SelfContained>
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+    <PublishTrimmed>false</PublishTrimmed>
+    <EnableCompressionInSingleFile>true</EnableCompressionInSingleFile>
+    <IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
   </PropertyGroup>
 
 </Project>
