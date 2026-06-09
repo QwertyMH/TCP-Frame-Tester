@@ -89,8 +89,19 @@
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
 
-                <TextBlock Grid.Row="0" Text="Conexion PLC" FontWeight="Bold" FontSize="14" 
-                           Foreground="{StaticResource TextPrimaryBrush}" Margin="0,0,0,8"/>
+                <Grid Grid.Row="0" Margin="0,0,0,8">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Column="0" Text="Conexion PLC" FontWeight="Bold" FontSize="14" 
+                               Foreground="{StaticResource TextPrimaryBrush}" VerticalAlignment="Center"/>
+                    <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                        <Ellipse x:Name="ledStatus" Width="12" Height="12" Fill="{StaticResource ErrorBrush}" Margin="0,0,6,0" VerticalAlignment="Center"/>
+                        <TextBlock x:Name="lblStatus" Text="Desconectado" FontWeight="Bold" 
+                                   Foreground="{StaticResource ErrorBrush}" VerticalAlignment="Center"/>
+                    </StackPanel>
+                </Grid>
 
                 <!-- IP + Puerto en un renglon -->
                 <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,0,0,8">
@@ -106,16 +117,18 @@
                     </StackPanel>
                 </StackPanel>
 
-                <!-- LED + Estado + Ping + Conectar en un renglon -->
-                <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0,0,0,12" VerticalAlignment="Center">
-                    <Ellipse x:Name="ledStatus" Width="12" Height="12" Fill="{StaticResource ErrorBrush}" Margin="0,0,6,0" VerticalAlignment="Center"/>
-                    <TextBlock x:Name="lblStatus" Text="Desconectado" FontWeight="Bold" 
-                               Foreground="{StaticResource ErrorBrush}" VerticalAlignment="Center" Margin="0,0,12,0"/>
-                    <Button x:Name="btnPing" Content="Ping" Width="70" Height="28" Margin="0,0,6,0"
+                <!-- Ping + Conectar iguales -->
+                <Grid Grid.Row="2" Margin="0,0,0,12">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="6"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Button x:Name="btnPing" Grid.Column="0" Content="Ping" Height="28"
                             Style="{StaticResource SecondaryButton}" FontSize="11" Click="BtnPing_Click" VerticalAlignment="Center"/>
-                    <Button x:Name="btnConnect" Content="Conectar" Width="90" Height="28"
+                    <Button x:Name="btnConnect" Grid.Column="2" Content="Conectar" Height="28"
                             Style="{StaticResource PrimaryButton}" FontSize="11" Click="BtnConnect_Click" VerticalAlignment="Center"/>
-                </StackPanel>
+                </Grid>
 
                 <TextBlock Grid.Row="3" Text="Envio Manual" FontWeight="Bold" FontSize="14" 
                            Foreground="{StaticResource TextPrimaryBrush}" Margin="0,0,0,8"/>
