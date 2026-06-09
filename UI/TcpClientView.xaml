@@ -8,9 +8,9 @@
 
     <Grid Background="{StaticResource BackgroundBrush}">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="3*"/>
+            <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="12"/>
-            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
 
         <!-- Log Card -->
@@ -74,7 +74,7 @@
         <!-- Conexion PLC Card -->
         <Border Grid.Column="2" Background="{StaticResource SurfaceBrush}" 
                 BorderBrush="{StaticResource BorderBrush}" BorderThickness="1"
-                CornerRadius="8" Padding="12">
+                CornerRadius="8" Padding="12" MinWidth="280" MaxWidth="280">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
@@ -86,6 +86,7 @@
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
 
                 <TextBlock Grid.Row="0" Text="Conexion PLC" FontWeight="Bold" FontSize="14" 
@@ -138,9 +139,9 @@
                            Foreground="{StaticResource TextSecondaryBrush}" Margin="0,0,0,2"/>
                 <TextBox x:Name="txtSend" Grid.Row="8" AcceptsReturn="True" 
                          TextWrapping="Wrap" VerticalScrollBarVisibility="Auto"
-                         Height="60" Margin="0,0,0,8"/>
+                         Margin="0,0,0,8" VerticalAlignment="Stretch"/>
 
-                <Button x:Name="btnSend" Grid.Row="8" Content="Enviar" Height="32" VerticalAlignment="Bottom"
+                <Button x:Name="btnSend" Grid.Row="9" Content="Enviar" Height="32"
                         Style="{StaticResource PrimaryButton}" FontSize="12" Click="BtnSend_Click"/>
             </Grid>
         </Border>
