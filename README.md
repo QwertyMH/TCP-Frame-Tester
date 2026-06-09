@@ -18,7 +18,7 @@ Aplicacion de escritorio para simular conexiones TCP/IP y probar comunicacion co
 - **TCP Server**: Escuchar conexiones entrantes y responder tramas
 - **Log de comunicacion**: Registro visual de todas las tramas TX/RX con timestamp, tipo, bytes y contenido HEX/ASCII
 - **Tramas configuradas**: Guardar tramas predefinidas con nombre, formato, contenido y retardo
-- **Envio manual**: Enviar datos en ASCII o HEX con terminadores configurables (CR, LF, CRLF, STXETX)
+- **Envio manual**: Enviar datos en ASCII o HEX con terminadores configurables (CR, LF, CRLF, STXETX). HEX acepta formato con espacios (`0A 0B 0C`) o contiguo (`0A0B0C`)
 - **Tema oscuro industrial**: Diseño profesional con fondo oscuro, paneles gris carbon, acentos azules y verdes
 
 ## Tecnologias

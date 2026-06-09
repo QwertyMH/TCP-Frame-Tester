@@ -8,7 +8,8 @@ namespace SimuladorTCP.Services;
 public static class DataConverter
 {
     /// <summary>
-    /// Convierte una cadena HEX (bytes separados por espacios) a arreglo de bytes.
+    /// Convierte una cadena HEX a arreglo de bytes.
+    /// Acepta bytes separados por espacios (ej. "0A 0B 0C") o contiguos (ej. "0A0B0C").
     /// Lanza FormatException si el formato es inválido.
     /// </summary>
     public static byte[] ParseHexString(string hex)
@@ -16,17 +17,19 @@ public static class DataConverter
         if (string.IsNullOrWhiteSpace(hex))
             return Array.Empty<byte>();
 
-        var parts = hex.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
-        var bytes = new List<byte>(parts.Length);
+        // Eliminar todos los espacios y guiones para permitir "0A 0B 0C" o "0A-0B-0C" o "0A0B0C"
+        var cleaned = hex.Replace(" ", "").Replace("-", "");
 
-        foreach (var part in parts)
+        if (cleaned.Length % 2 != 0)
+            throw new FormatException("Cadena HEX inválida: la longitud debe ser par (cada byte tiene 2 caracteres hex).");
+
+        var bytes = new List<byte>(cleaned.Length / 2);
+
+        for (int i = 0; i < cleaned.Length; i += 2)
         {
-            var trimmed = part.Trim();
-            if (trimmed.Length != 2)
-                throw new FormatException($"Valor HEX inválido: '{trimmed}'. Debe tener 2 caracteres.");
-
-            if (!byte.TryParse(trimmed, System.Globalization.NumberStyles.HexNumber, null, out var b))
-                throw new FormatException($"Valor HEX inválido: '{trimmed}'. No es un byte válido.");
+            var byteStr = cleaned.Substring(i, 2);
+            if (!byte.TryParse(byteStr, System.Globalization.NumberStyles.HexNumber, null, out var b))
+                throw new FormatException($"Valor HEX inválido: '{byteStr}'. No es un byte válido.");
 
             bytes.Add(b);
         }
