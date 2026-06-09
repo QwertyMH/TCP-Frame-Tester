@@ -1,0 +1,139 @@
+<UserControl x:Class="SimuladorTCP.UI.TcpServerView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             mc:Ignorable="d"
+             d:DesignHeight="450" d:DesignWidth="800">
+
+    <Grid Background="{StaticResource BackgroundBrush}">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="3*"/>
+            <ColumnDefinition Width="12"/>
+            <ColumnDefinition Width="1*"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- Log Card -->
+        <Border Grid.Column="0" Background="{StaticResource SurfaceBrush}" 
+                BorderBrush="{StaticResource BorderBrush}" BorderThickness="1"
+                CornerRadius="8" Padding="12">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,8">
+                    <TextBlock Text="Log de comunicacion" FontWeight="Bold" FontSize="14" 
+                               Foreground="{StaticResource TextPrimaryBrush}" VerticalAlignment="Center"/>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="12,0,0,0">
+                        <Button x:Name="btnPause" Content="Pausar" Width="70" Height="28" Margin="0,0,4,0"
+                                Style="{StaticResource SecondaryButton}" FontSize="11" Click="BtnPause_Click"/>
+                        <Button x:Name="btnClearLog" Content="Limpiar" Width="85" Height="28"
+                                Style="{StaticResource SecondaryButton}" FontSize="11" Click="BtnClearLog_Click"/>
+                    </StackPanel>
+                </StackPanel>
+
+                <DataGrid x:Name="dgLog" Grid.Row="1" AutoGenerateColumns="False" IsReadOnly="True"
+                          CanUserAddRows="False" CanUserDeleteRows="False" CanUserReorderColumns="False"
+                          CanUserResizeColumns="True" CanUserSortColumns="False"
+                          HeadersVisibility="Column" GridLinesVisibility="Horizontal"
+                          HorizontalGridLinesBrush="{StaticResource BorderBrush}" 
+                          VerticalGridLinesBrush="Transparent">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Hora" Binding="{Binding Timestamp}" Width="90"/>
+                        <DataGridTextColumn Header="Tipo" Binding="{Binding Direction}" Width="50">
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="Foreground" Value="{Binding DirectionColor}"/>
+                                    <Setter Property="FontWeight" Value="Bold"/>
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+                        <DataGridTextColumn Header="Bytes" Binding="{Binding ByteCount}" Width="50"/>
+                        <DataGridTextColumn Header="Contenido HEX" Binding="{Binding HexData}" Width="*"/>
+                        <DataGridTextColumn Header="ASCII" Binding="{Binding AsciiData}" Width="120"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Grid>
+        </Border>
+
+        <!-- Configuracion Server Card -->
+        <Border Grid.Column="2" Background="{StaticResource SurfaceBrush}" 
+                BorderBrush="{StaticResource BorderBrush}" BorderThickness="1"
+                CornerRadius="8" Padding="12">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <TextBlock Grid.Row="0" Text="Configuracion Server" FontWeight="Bold" FontSize="14" 
+                           Foreground="{StaticResource TextPrimaryBrush}" Margin="0,0,0,8"/>
+
+                <TextBlock Grid.Row="1" Text="Puerto" FontSize="11" 
+                           Foreground="{StaticResource TextSecondaryBrush}" Margin="0,0,0,2"/>
+                <TextBox x:Name="txtPort" Grid.Row="2" Text="502" Margin="0,0,0,8" Width="80" HorizontalAlignment="Left"/>
+
+                <Button x:Name="btnListen" Grid.Row="3" Content="Escuchar" Height="32" Margin="0,0,0,8"
+                        Style="{StaticResource PrimaryButton}" FontSize="12" Click="BtnListen_Click"/>
+
+                <StackPanel Grid.Row="4" Orientation="Horizontal" Margin="0,0,0,8">
+                    <Ellipse x:Name="ledStatus" Width="12" Height="12" Fill="{StaticResource ErrorBrush}" Margin="0,0,6,0"/>
+                    <TextBlock x:Name="lblStatus" Text="Detenido" FontWeight="Bold" 
+                               Foreground="{StaticResource ErrorBrush}" VerticalAlignment="Center"/>
+                </StackPanel>
+
+                <TextBlock x:Name="lblClientCount" Grid.Row="5" Text="Clientes: 0" FontSize="11" 
+                           Foreground="{StaticResource TextSecondaryBrush}" Margin="0,0,0,8"/>
+
+                <TextBlock Grid.Row="6" Text="Clientes conectados" FontWeight="Bold" FontSize="12" 
+                           Foreground="{StaticResource TextPrimaryBrush}" Margin="0,0,0,4"/>
+                <ListBox x:Name="lstClients" Grid.Row="7" Height="100" Margin="0,0,0,8"/>
+
+                <TextBlock Grid.Row="8" Text="Envio Manual" FontWeight="Bold" FontSize="14" 
+                           Foreground="{StaticResource TextPrimaryBrush}" Margin="0,0,0,8"/>
+
+                <StackPanel Grid.Row="9" Orientation="Horizontal" Margin="0,0,0,8">
+                    <RadioButton x:Name="rdoAscii" Content="ASCII" Margin="0,0,12,0" Foreground="{StaticResource TextSecondaryBrush}"/>
+                    <RadioButton x:Name="rdoHex" Content="HEX" IsChecked="True" Foreground="{StaticResource TextSecondaryBrush}"/>
+                </StackPanel>
+
+                <TextBlock Grid.Row="10" Text="Terminador" FontSize="11" 
+                           Foreground="{StaticResource TextSecondaryBrush}" Margin="0,0,0,2"/>
+                <ComboBox x:Name="cboTerminator" Grid.Row="11" Margin="0,0,0,8">
+                    <ComboBoxItem Content="Ninguno" IsSelected="True"/>
+                    <ComboBoxItem Content="CR"/>
+                    <ComboBoxItem Content="LF"/>
+                    <ComboBoxItem Content="CRLF"/>
+                    <ComboBoxItem Content="STXETX"/>
+                </ComboBox>
+
+                <TextBox x:Name="txtSend" Grid.Row="12" AcceptsReturn="True" 
+                         TextWrapping="Wrap" VerticalScrollBarVisibility="Auto"
+                         Height="40" Margin="0,0,0,8"/>
+
+                <StackPanel Grid.Row="13" Orientation="Vertical" Margin="0,0,0,4">
+                    <Button x:Name="btnSendSelected" Content="Enviar seleccionado" Height="26" Margin="0,0,0,4"
+                            Style="{StaticResource SecondaryButton}" FontSize="11" Click="BtnSendSelected_Click"/>
+                    <Button x:Name="btnSendAll" Content="Enviar a todos" Height="26" Margin="0,0,0,4"
+                            Style="{StaticResource SecondaryButton}" FontSize="11" Click="BtnSendAll_Click"/>
+                    <Button x:Name="btnDisconnectClient" Content="Desconectar cliente" Height="26"
+                            Style="{StaticResource DangerButton}" FontSize="11" Click="BtnDisconnectClient_Click"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+    </Grid>
+</UserControl>

@@ -1,0 +1,148 @@
+<UserControl x:Class="SimuladorTCP.UI.TcpClientView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             mc:Ignorable="d"
+             d:DesignHeight="450" d:DesignWidth="800">
+
+    <Grid Background="{StaticResource BackgroundBrush}">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="3*"/>
+            <ColumnDefinition Width="12"/>
+            <ColumnDefinition Width="1*"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- Log Card -->
+        <Border Grid.Column="0" Background="{StaticResource SurfaceBrush}" 
+                BorderBrush="{StaticResource BorderBrush}" BorderThickness="1"
+                CornerRadius="8" Padding="12">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <!-- Header -->
+                <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,8">
+                    <TextBlock Text="Log de comunicacion" FontWeight="Bold" FontSize="14" 
+                               Foreground="{StaticResource TextPrimaryBrush}" VerticalAlignment="Center"/>
+                     <StackPanel Orientation="Horizontal" Margin="12,0,0,0">
+                        <Button x:Name="btnFilterAll" Content="Todo" Width="60" Height="28" Margin="0,0,4,0"
+                                Style="{StaticResource SecondaryButton}" FontSize="11" Click="Filter_Click"/>
+                        <Button x:Name="btnFilterTx" Content="TX" Width="45" Height="28" Margin="0,0,4,0"
+                                Style="{StaticResource SecondaryButton}" FontSize="11" Click="Filter_Click"/>
+                        <Button x:Name="btnFilterRx" Content="RX" Width="45" Height="28" Margin="0,0,4,0"
+                                Style="{StaticResource SecondaryButton}" FontSize="11" Click="Filter_Click"/>
+                        <Button x:Name="btnFilterErrors" Content="Errores" Width="70" Height="28" Margin="0,0,4,0"
+                                Style="{StaticResource SecondaryButton}" FontSize="11" Click="Filter_Click"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                        <Button x:Name="btnPause" Content="Pausar" Width="70" Height="28" Margin="0,0,4,0"
+                                Style="{StaticResource SecondaryButton}" FontSize="11" Click="BtnPause_Click"/>
+                        <Button x:Name="btnClearLog" Content="Limpiar" Width="85" Height="28"
+                                Style="{StaticResource SecondaryButton}" FontSize="11" Click="BtnClearLog_Click"/>
+                    </StackPanel>
+                </StackPanel>
+
+                <!-- DataGrid -->
+                <DataGrid x:Name="dgLog" Grid.Row="2" AutoGenerateColumns="False" IsReadOnly="True"
+                          CanUserAddRows="False" CanUserDeleteRows="False" CanUserReorderColumns="False"
+                          CanUserResizeColumns="True" CanUserSortColumns="False"
+                          HeadersVisibility="Column" GridLinesVisibility="Horizontal"
+                          HorizontalGridLinesBrush="{StaticResource BorderBrush}" 
+                          VerticalGridLinesBrush="Transparent">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Hora" Binding="{Binding Timestamp}" Width="90"/>
+                        <DataGridTextColumn Header="Tipo" Binding="{Binding Direction}" Width="50">
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="Foreground" Value="{Binding DirectionColor}"/>
+                                    <Setter Property="FontWeight" Value="Bold"/>
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+                        <DataGridTextColumn Header="Bytes" Binding="{Binding ByteCount}" Width="50"/>
+                        <DataGridTextColumn Header="Contenido HEX" Binding="{Binding HexData}" Width="*"/>
+                        <DataGridTextColumn Header="ASCII" Binding="{Binding AsciiData}" Width="120"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Grid>
+        </Border>
+
+        <!-- Conexion PLC Card -->
+        <Border Grid.Column="2" Background="{StaticResource SurfaceBrush}" 
+                BorderBrush="{StaticResource BorderBrush}" BorderThickness="1"
+                CornerRadius="8" Padding="12">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <TextBlock Grid.Row="0" Text="Conexion PLC" FontWeight="Bold" FontSize="14" 
+                           Foreground="{StaticResource TextPrimaryBrush}" Margin="0,0,0,8"/>
+
+                <!-- IP + Puerto en un renglon -->
+                <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,0,0,8">
+                    <StackPanel Margin="0,0,8,0" Width="120">
+                        <TextBlock Text="IP del PLC" FontSize="11" 
+                                   Foreground="{StaticResource TextSecondaryBrush}" Margin="0,0,0,2"/>
+                        <TextBox x:Name="txtIp" Text="192.168.1.100" Margin="0,0,0,0"/>
+                    </StackPanel>
+                    <StackPanel Width="80">
+                        <TextBlock Text="Puerto" FontSize="11" 
+                                   Foreground="{StaticResource TextSecondaryBrush}" Margin="0,0,0,2"/>
+                        <TextBox x:Name="txtPort" Text="502" Margin="0,0,0,0" Width="80"/>
+                    </StackPanel>
+                </StackPanel>
+
+                <!-- LED + Estado + Ping + Conectar en un renglon -->
+                <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0,0,0,12" VerticalAlignment="Center">
+                    <Ellipse x:Name="ledStatus" Width="12" Height="12" Fill="{StaticResource ErrorBrush}" Margin="0,0,6,0" VerticalAlignment="Center"/>
+                    <TextBlock x:Name="lblStatus" Text="Desconectado" FontWeight="Bold" 
+                               Foreground="{StaticResource ErrorBrush}" VerticalAlignment="Center" Margin="0,0,12,0"/>
+                    <Button x:Name="btnPing" Content="Ping" Width="70" Height="28" Margin="0,0,6,0"
+                            Style="{StaticResource SecondaryButton}" FontSize="11" Click="BtnPing_Click" VerticalAlignment="Center"/>
+                    <Button x:Name="btnConnect" Content="Conectar" Width="90" Height="28"
+                            Style="{StaticResource PrimaryButton}" FontSize="11" Click="BtnConnect_Click" VerticalAlignment="Center"/>
+                </StackPanel>
+
+                <TextBlock Grid.Row="3" Text="Envio Manual" FontWeight="Bold" FontSize="14" 
+                           Foreground="{StaticResource TextPrimaryBrush}" Margin="0,0,0,8"/>
+
+                <StackPanel Grid.Row="4" Orientation="Horizontal" Margin="0,0,0,8">
+                    <RadioButton x:Name="rdoAscii" Content="ASCII" Margin="0,0,12,0" Foreground="{StaticResource TextSecondaryBrush}"/>
+                    <RadioButton x:Name="rdoHex" Content="HEX" IsChecked="True" Foreground="{StaticResource TextSecondaryBrush}"/>
+                </StackPanel>
+
+                <TextBlock Grid.Row="5" Text="Terminador" FontSize="11" 
+                           Foreground="{StaticResource TextSecondaryBrush}" Margin="0,0,0,2"/>
+                <ComboBox x:Name="cboTerminator" Grid.Row="6" Margin="0,0,0,8">
+                    <ComboBoxItem Content="Ninguno" IsSelected="True"/>
+                    <ComboBoxItem Content="CR"/>
+                    <ComboBoxItem Content="LF"/>
+                    <ComboBoxItem Content="CRLF"/>
+                    <ComboBoxItem Content="STXETX"/>
+                </ComboBox>
+
+                <TextBlock Grid.Row="7" Text="Datos" FontSize="11" 
+                           Foreground="{StaticResource TextSecondaryBrush}" Margin="0,0,0,2"/>
+                <TextBox x:Name="txtSend" Grid.Row="8" AcceptsReturn="True" 
+                         TextWrapping="Wrap" VerticalScrollBarVisibility="Auto"
+                         Height="60" Margin="0,0,0,8"/>
+
+                <Button x:Name="btnSend" Grid.Row="8" Content="Enviar" Height="32" VerticalAlignment="Bottom"
+                        Style="{StaticResource PrimaryButton}" FontSize="12" Click="BtnSend_Click"/>
+            </Grid>
+        </Border>
+    </Grid>
+</UserControl>
